@@ -14,7 +14,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE products(
-	id varchar PRIMARY KEY,
+	product_id varchar PRIMARY KEY,
 	name varchar,
 	description text,
 	price float,
@@ -22,7 +22,7 @@ CREATE TABLE products(
 );
 
 CREATE TABLE carts(
-	id varchar PRIMARY KEY,
+	cart_id varchar PRIMARY KEY,
 	status varchar,
 	created_at timestamp,
 	updated_at timestamp,
@@ -32,7 +32,7 @@ CREATE TABLE carts(
 CREATE TABLE cart_items(
 	id varchar PRIMARY KEY,
 	cart_id varchar REFERENCES carts(id),
-	product_id varchar REFERENCES products(id),
+	product_id varchar REFERENCES products(product_id),
 	quantity integer
 );
 
@@ -47,13 +47,13 @@ CREATE TABLE orders(
 CREATE TABLE order_items(
 	id varchar PRIMARY KEY,
 	order_id varchar REFERENCES orders(id),
-	product_id varchar REFERENCES products(id),
+	product_id varchar REFERENCES products(product_id),
 	quantity integer,
 	unit_price float
 );
 
 CREATE TABLE payments(
-	id varchar PRIMARY KEY,
+	payment_id varchar PRIMARY KEY,
 	order_id varchar REFERENCES orders(id),
 	amount float,
 	currency varchar,

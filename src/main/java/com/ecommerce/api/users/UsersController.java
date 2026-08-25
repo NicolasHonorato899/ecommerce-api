@@ -1,28 +1,30 @@
 package com.ecommerce.api.users;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/users")
 public class UsersController {
 
     @Autowired
-    private IUserRepository userRepository;
+    private UsersService usersService;
 
     @PostMapping("/")
-    public ResponseEntity create(@RequestBody UsersModel usersModel){
-        var user = this.userRepository.findByEmail(usersModel.getEmail());
+    public ResponseEntity<?> create(@Valid @RequestBody UsersRequestDto userDto){
+        if(usersService.existsById(userDto.email())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
+        }
+        var userCreated = usersService.createUser(userDto);
+        return ResponseEntity.status(HttpStatus.OK).body(userCreated);
 
-    if(user != null){
-        System.out.println("User already exists:");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
     }
 
-    var userCreatd = this.userRepository.save(usersModel);
-    return ResponseEntity.status(HttpStatus.OK).body(userCreatd);
-
+    @GetMapping("/")
+    public ResponseEntity<?> getAllUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
     }
 }

@@ -1,0 +1,21 @@
+$kind: http-request
+name: http:localhost:8080/products/
+description: ""
+url: http://localhost:8080/products/
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "productId": "X865A",
+        "name": "Faca Ginsu2000",
+        "description": "Faca Ginsu2000 brabo dmskkkkkk",
+        "price": "200.00",
+        "stock": "100"
+    }
+auth:
+  type: basic
+  credentials:
+    username: user
+    password: "12345"
+order: 1787339775178

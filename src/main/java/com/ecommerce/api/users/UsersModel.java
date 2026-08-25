@@ -9,10 +9,15 @@ import lombok.Data;
 @Entity(name = "users")
 public class UsersModel {
     @Id
+    @Column(name = "email")
     private String email;
 
-    @Column(unique = true)
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "name")
+    private String name;
 }

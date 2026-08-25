@@ -1,0 +1,15 @@
+$kind: http-request
+name: http://localhost:8080/users/
+description: ""
+url: http://localhost:8080/users/
+method: POST
+body:
+  type: text
+  content: |-
+    {
+        "email":v"aaaaa@yahoo.com",
+        "password": "12345",
+        "adress":v"Rua Jose Vicente",
+        "name": "marcelo123"
+    }
+order: 2685645437385135

@@ -1,8 +1,6 @@
 package com.ecommerce.api.users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
-
-public interface IUserRepository extends JpaRepository<UsersModel, UUID>{
+public interface IUsersRepository extends JpaRepository<UsersModel, String>{
     UsersModel findByEmail(String email);
 }
