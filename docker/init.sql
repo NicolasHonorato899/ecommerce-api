@@ -37,7 +37,7 @@ CREATE TABLE cart_items(
 );
 
 CREATE TABLE orders(
-	id varchar PRIMARY KEY,
+	order_id varchar PRIMARY KEY,
 	user_email varchar REFERENCES users(email),
 	status varchar,
 	amount float,
