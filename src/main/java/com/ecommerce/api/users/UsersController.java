@@ -13,18 +13,32 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UsersRequestDto userDto){
-        if(usersService.existsById(userDto.email())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
-        }
         var userCreated = usersService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.OK).body(userCreated);
-
     }
-
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<?> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(usersService.getAllUsers());
+    }
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getUser(@PathVariable String email){
+        return ResponseEntity.status(HttpStatus.OK).body(usersService.getUserByEmail(email));
+    }
+    @PutMapping("/{email}")
+    public ResponseEntity<?> updateUser(@PathVariable String email, @Valid @RequestBody UsersRequestDto userDto){
+        var userUpdated = usersService.updateUser(email, userDto);
+        if(userUpdated != null){
+            return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+    @DeleteMapping("/{email}")
+    public ResponseEntity<?> deleteUser(@PathVariable String email){
+        if(usersService.deleteByEmail(email)){
+            return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 }

@@ -24,6 +24,16 @@ public class UsersService {
                 .toList();
     }
 
+    public UsersResponseDto getUserByEmail(String email){
+        var user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return toResponseDto(user);
+    }
+
+    public boolean existsByEmail(String email) {
+        return usersRepository.existsById(email);
+    }
+
     public UsersResponseDto createUser(UsersRequestDto userDto){
         if(usersRepository.existsById(userDto.email())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists");
@@ -37,6 +47,25 @@ public class UsersService {
 
         var saved = usersRepository.save(user);
         return toResponseDto(saved);
+    }
+
+    public UsersResponseDto updateUser(String email, UsersRequestDto userDto){
+        var user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        user.setName(userDto.name());
+        user.setAddress(userDto.address());
+        user.setPassword(passwordEncoder.encode(userDto.password()));
+        var updated = usersRepository.save(user);
+        return toResponseDto(updated);
+    }
+
+    public boolean deleteByEmail(String email){
+        var user = usersRepository.findByEmail(email);
+        if(user.isPresent()){
+            usersRepository.delete(user.get());
+            return true;
+        }
+        return false;
     }
 
     private UsersResponseDto toResponseDto(UsersModel user){

@@ -1,9 +1,13 @@
 package com.ecommerce.api.products;
 
+import com.ecommerce.api.order_items.OrderItemsModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
+import java.util.List;
 
 @Data
 @Entity(name = "products")
@@ -24,4 +28,7 @@ public class ProductsModel {
 
     @Column(name = "stock")
     private int stock;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OrderItemsModel> orderItems;
 }

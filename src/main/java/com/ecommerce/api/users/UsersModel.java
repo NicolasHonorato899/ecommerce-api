@@ -1,9 +1,10 @@
 package com.ecommerce.api.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.ecommerce.api.carts.CartsModel;
+import com.ecommerce.api.orders.OrdersModel;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.util.List;
 
 @Data
 @Entity(name = "users")
@@ -20,4 +21,11 @@ public class UsersModel {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<CartsModel> carts;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<OrdersModel> orders;
+
 }

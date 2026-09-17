@@ -11,12 +11,8 @@ public class PaymentsController {
     @Autowired
     private IPaymentsRepository paymentsRepository;
 
-    @PostMapping("/")
-    public ResponseEntity<?> create(@RequestBody PaymentsModel paymentsModel) {
-        if (paymentsRepository.existsById(paymentsModel.getPaymentId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment already exists");
-        }
-        var savedPayment = paymentsRepository.save(paymentsModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> create(@PathVariable String orderId){
+
     }
 }
