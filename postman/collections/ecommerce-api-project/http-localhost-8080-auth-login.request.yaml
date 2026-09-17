@@ -1,0 +1,21 @@
+$kind: http-request
+name: http://localhost:8080/auth/login
+description: ""
+url: http://localhost:8080/auth/login
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "email":"12345@gmail.com",
+        "password":"12345"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: ""
+scripts:
+  - type: afterResponse
+    code: pm.environment.set("token", pm.response.json().token); // Store the token in the environment variables for future use
+    language: text/javascript
+order: 4478400601733407

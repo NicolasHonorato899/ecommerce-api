@@ -1,0 +1,12 @@
+$kind: http-request
+name: http:localhost:8080/users
+description: ""
+url: ""
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "status": "active"
+    }
+order: 4453640736953940
