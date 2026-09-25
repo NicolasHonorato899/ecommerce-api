@@ -10,7 +10,8 @@ CREATE TABLE users(
 	email varchar PRIMARY KEY,
 	password varchar,
 	name varchar,
-	address varchar
+	address varchar,
+	role varchar DEFAULT 'USER'
 );
 
 CREATE TABLE products(
@@ -31,7 +32,7 @@ CREATE TABLE carts(
 
 CREATE TABLE cart_items(
 	id varchar PRIMARY KEY,
-	cart_id varchar REFERENCES carts(id),
+	cart_id varchar REFERENCES carts(cart_id),
 	product_id varchar REFERENCES products(product_id),
 	quantity integer
 );
@@ -46,7 +47,7 @@ CREATE TABLE orders(
 
 CREATE TABLE order_items(
 	id varchar PRIMARY KEY,
-	order_id varchar REFERENCES orders(id),
+	order_id varchar REFERENCES orders(order_id),
 	product_id varchar REFERENCES products(product_id),
 	quantity integer,
 	unit_price float
@@ -54,7 +55,7 @@ CREATE TABLE order_items(
 
 CREATE TABLE payments(
 	payment_id varchar PRIMARY KEY,
-	order_id varchar REFERENCES orders(id),
+	order_id varchar REFERENCES orders(order_id),
 	amount float,
 	currency varchar,
 	status varchar,

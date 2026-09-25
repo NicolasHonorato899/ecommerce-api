@@ -21,54 +21,54 @@ import org.modelmapper.ModelMapper;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Instâncias de JwtUtil e UserDetailsService injetadas pelo Spring
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
-    // Construtor para injeção de dependências de JwtUtil e UserDetailsService
     @Autowired
     public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
 
-    // Configuração do filtro de segurança
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Cria uma instância do JwtRequestFilter com JwtUtil e UserDetailsService
         JwtRequestFilter jwtRequestFilter = new JwtRequestFilter(jwtUtil, userDetailsService);
 
         http
-                .csrf(AbstractHttpConfigurer::disable) // Desativa proteção CSRF para APIs REST (não aplicável a APIs que não mantêm estado)
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/users").permitAll() // cadastro
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll() // login
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll() // catálogo público
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/payments/webhook").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/error").permitAll() // deixar o dispatch de erro passar para mostrar o status real (400/404/500)
-                        //.requestMatchers("/usuario/**").authenticated() // Requer autenticação para qualquer endpoint que comece com /usuario/
-                        .anyRequest().authenticated() // Requer autenticação para todas as outras requisições
+                        .requestMatchers(HttpMethod.GET, "/orders/*/success", "/orders/*/cancel").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/products/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/payments").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/payments/*").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a política de sessão como stateless (sem sessão)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Adiciona o filtro JWT antes do filtro de autenticação padrão
-        // Retorna a configuração do filtro de segurança construída
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    // Configura o PasswordEncoder para criptografar senhas usando BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Retorna uma instância de BCryptPasswordEncoder
+        return new BCryptPasswordEncoder();
     }
 
-    // Configura o AuthenticationManager usando AuthenticationConfiguration
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        // Obtém e retorna o AuthenticationManager da configuração de autenticação
         return authenticationConfiguration.getAuthenticationManager();
     }
 

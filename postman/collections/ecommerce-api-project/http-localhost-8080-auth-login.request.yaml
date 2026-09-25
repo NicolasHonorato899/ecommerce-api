@@ -7,8 +7,7 @@ body:
   type: json
   content: |-
     {
-        "email":"12345@gmail.com",
-        "password":"12345"
+        "email":"12345@gmail.com", "password":"12345"
     }
 auth:
   type: bearer
