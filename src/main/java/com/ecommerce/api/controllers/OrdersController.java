@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ecommerce.api.services.OrdersService;
 import com.ecommerce.api.repositories.IUsersRepository;
 import com.ecommerce.api.dtos.OrdersResponseDto;
+import com.ecommerce.api.dtos.CheckoutResponseDto;
+import java.util.List;
 
 
 @RestController
@@ -23,12 +25,12 @@ public class OrdersController {
     private IUsersRepository usersRepository;
 
     @PostMapping("/checkout")
-    public ResponseEntity<?> checkout(Authentication authentication) {
+    public ResponseEntity<CheckoutResponseDto> checkout(Authentication authentication) {
         var order = ordersService.checkout(authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
     @GetMapping
-    public ResponseEntity<?> getOrders(Authentication authentication, @RequestParam(required = false) Boolean isAdmin){
+    public ResponseEntity<List<OrdersResponseDto>> getOrders(Authentication authentication, @RequestParam(required = false) Boolean isAdmin){
         boolean shouldFetchAll = false;
 
         if (isAdmin != null && isAdmin) {
@@ -45,7 +47,7 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
     @GetMapping("/{orderId}")
-    public ResponseEntity<?> getOrderById(@PathVariable String orderId, Authentication authentication){
+    public ResponseEntity<OrdersResponseDto> getOrderById(@PathVariable String orderId, Authentication authentication){
         var order = ordersService.getOrderById(orderId, authentication.getName());
         return ResponseEntity.status(HttpStatus.OK).body(order);
     }

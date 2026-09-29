@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.api.services.PaymentsService;
+import io.swagger.v3.oas.annotations.Hidden;
 
-
+@Hidden
 @RestController
 public class PaymentsWebhookController {
 

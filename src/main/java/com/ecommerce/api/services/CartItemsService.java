@@ -13,7 +13,6 @@ import com.ecommerce.api.repositories.IProductsRepository;
 import com.ecommerce.api.repositories.ICartItemsRepository;
 import com.ecommerce.api.models.CartItemsModel;
 import com.ecommerce.api.models.ProductsModel;
-import com.ecommerce.api.models.UsersModel;
 import com.ecommerce.api.dtos.CartItemsResponseDto;
 import com.ecommerce.api.dtos.CartItemsRequestDto;
 
@@ -35,6 +34,9 @@ public class CartItemsService {
         if(product.getStock() < requestDto.quantity()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient stock");
         }
+
+        product.setStock(product.getStock() - requestDto.quantity());
+        productsRepository.save(product);
 
         var existingCartItem = cartItemsRepository.findByCartAndProduct(cart, product);
 

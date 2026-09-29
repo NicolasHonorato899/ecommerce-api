@@ -18,22 +18,22 @@ public class CartsController {
     private CartsService cartsService;
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody CartsRequestDto cartsDto, Authentication authentication){
+    public ResponseEntity<CartsResponseDto> create(@Valid @RequestBody CartsRequestDto cartsDto, Authentication authentication){
         var cartCreated = cartsService.createCart(authentication.getName(), cartsDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartCreated);
     }
     @GetMapping("/{cartId}")
-    public ResponseEntity<?> getCart(@PathVariable String cartId, Authentication authentication){
+    public ResponseEntity<CartsResponseDto> getCart(@PathVariable String cartId, Authentication authentication){
         return ResponseEntity.status(HttpStatus.OK).body(cartsService.getCartById(cartId, authentication.getName()));
     }
     @PutMapping("/{cartId}")
-    public ResponseEntity<?> updateCart(@PathVariable String cartId, @Valid @RequestBody CartsRequestDto cartDto, Authentication authentication){
+    public ResponseEntity<CartsResponseDto> updateCart(@PathVariable String cartId, @Valid @RequestBody CartsRequestDto cartDto, Authentication authentication){
         var updated = cartsService.updateCart(cartId, cartDto, authentication.getName());
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
     @DeleteMapping("/{cartId}")
-    public ResponseEntity<?> deleteCart(@PathVariable String cartId, Authentication authentication){
+    public ResponseEntity<Void> deleteCart(@PathVariable String cartId, Authentication authentication){
         cartsService.deleteCart(cartId, authentication.getName());
-        return ResponseEntity.status(HttpStatus.OK).body("Cart deleted");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

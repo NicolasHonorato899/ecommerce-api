@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import com.ecommerce.api.models.CartsModel;
 import com.ecommerce.api.dtos.CartsResponseDto;
 import com.ecommerce.api.dtos.CartsRequestDto;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -55,6 +56,8 @@ public class CartsService {
         cart.setCartId(UUID.randomUUID().toString());
         cart.setStatus(cartDto.status() != null ? cartDto.status() : "active");
         cart.setUser(user);
+        cart.setCreatedAt(LocalDateTime.now());
+        cart.setUpdatedAt(LocalDateTime.now());
         var saved = cartsRepository.save(cart);
         return toResponseDto(saved);
     }

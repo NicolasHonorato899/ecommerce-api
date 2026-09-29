@@ -5,11 +5,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Spring Boot 4 removed H2ConsoleAutoConfiguration (the spring.h2.console.* properties no longer bind),
- * so the H2 web console servlet is registered manually here. Keep it enabled only in non-prod profiles:
- * see application-h2.properties for the profile config.
- */
 @Configuration
 public class H2ConsoleConfig {
 

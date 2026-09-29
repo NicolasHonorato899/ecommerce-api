@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import com.ecommerce.api.services.PaymentsService;
 import com.ecommerce.api.dtos.PaymentsResponseDto;
+import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
@@ -15,13 +16,13 @@ public class PaymentsController {
     private PaymentsService paymentsService;
 
     @GetMapping
-    public ResponseEntity<?> getAllPayments(Authentication authentication){
+    public ResponseEntity<List<PaymentsResponseDto>> getAllPayments(Authentication authentication){
         var payments = paymentsService.findAll(authentication.getName(), true);
         return ResponseEntity.status(HttpStatus.OK).body(payments);
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<?> getPaymentByOrderId(@PathVariable String orderId, Authentication authentication){
+    public ResponseEntity<PaymentsResponseDto> getPaymentByOrderId(@PathVariable String orderId, Authentication authentication){
         PaymentsResponseDto payment = paymentsService.findByOrderId(orderId, authentication.getName());
         return ResponseEntity.status(HttpStatus.OK).body(payment);
     }

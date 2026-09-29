@@ -12,6 +12,7 @@ import com.ecommerce.api.services.ProductsService;
 import com.ecommerce.api.repositories.IUsersRepository;
 import com.ecommerce.api.dtos.ProductsRequestDto;
 import com.ecommerce.api.dtos.ProductResponseDto;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -22,26 +23,26 @@ public class ProductsController {
     private IUsersRepository usersRepository;
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ProductsRequestDto productsDto) {
+    public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductsRequestDto productsDto) {
         var savedProduct = productsService.createProduct(productsDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
     @GetMapping
-    public ResponseEntity<?> getAllProducts() {
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
         return ResponseEntity.status(HttpStatus.OK).body(productsService.getAllProducts());
     }
     @GetMapping("/{productId}")
-    public ResponseEntity<?> getProduct(@PathVariable String productId){
+    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable String productId){
         return ResponseEntity.status(HttpStatus.OK).body(productsService.getProductById(productId));
     }
     @PutMapping("/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable String productId, Authentication authentication, @Valid @RequestBody ProductsRequestDto productsDto) {
+    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable String productId, Authentication authentication, @Valid @RequestBody ProductsRequestDto productsDto) {
         verifyAdminRole(authentication);
         var updatedProduct = productsService.updateProduct(productId, productsDto);
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String productId, Authentication authentication){
+    public ResponseEntity<Void> deleteProduct(@PathVariable String productId, Authentication authentication){
         verifyAdminRole(authentication);
         boolean deleted = productsService.deleteProduct(productId);
         if (!deleted) {
